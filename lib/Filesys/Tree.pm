@@ -8,17 +8,6 @@ use strict;
 
 Filesys::Tree - Return contents of directories in a tree-like format
 
-=head1 IMPORTANT NOTE
-
-This is only version 0.01 . There is a small bug which I'm aware of,
-but my brain is no longer in condition of taking care of me, and my
-stomach is begging me to go out and eat something, which I will :-)
-
-I plan to take care of that bug as soon as possible. It, meanwhile,
-you wish to do that and send me a patch, you're welcome O:-)
-
-Can you find the bug? ;-)
-
 =cut
 
 require Exporter;
@@ -36,7 +25,7 @@ our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw(
 );
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -123,7 +112,7 @@ sub tree {
       opendir(DIR,$_);
       (my $dir = $_) =~ s{/$}{};
       (my $sub = $dir);
-      $sub =~ s/.*\/([^\/])$/$1/ unless $config{full};
+      $sub = basename($sub) unless $config{full};
       $tree->{$sub} = { type => 'd' , contents => 
                                     tree( { %config , 'max-depth' => $config{'max-depth'} - 1 } ,
                                                      map {"$dir/$_"}
@@ -134,7 +123,7 @@ sub tree {
   }
 
   # returning the tree
-  $tree;
+  return $tree;
 }
 
 =head1 OPTIONS
@@ -207,6 +196,10 @@ Please report any bugs or feature requests to
 C<bug-filesys-tree@rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org>.  I will be notified, and then you'll automatically
 be notified of progress on your bug as I make changes.
+
+=head1 SEE ALSO
+
+tree(1).
 
 =head1 COPYRIGHT & LICENSE
 
